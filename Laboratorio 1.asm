@@ -145,8 +145,6 @@ ejecutar_mru_vel:
     jal mru_velocidad
     j loop_main
 
-
-
 submenu_mcua:
     la $a0, menu_mcua
     li $v0, 4
@@ -206,7 +204,6 @@ mcua_aceleracion:
 
     jr $ra
 
-
 mcua_velocidad_final:
     # Pedir velocidad angular inicial
     la $a0, ingresar_velocidad_inicial
@@ -245,8 +242,6 @@ mcua_velocidad_final:
     syscall
 
     jr $ra
-
-
 
 # --------- TRIGONOMETRICA --------------
 opcion_trigonometrica:
