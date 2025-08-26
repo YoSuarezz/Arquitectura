@@ -31,7 +31,10 @@ resultado_aceleracion:      .asciiz "\nLa aceleracion angular es: "
 resultado_velfinal:         .asciiz "\nLa velocidad angular final es: "
 resultado_tanh: .asciiz "\nEl valor de tanh(x) es: "
 
+<<<<<<< HEAD
 # ---------------- CONSTANTES ----------------
+=======
+>>>>>>> 55c4f9c99e244fd4a3a7e541848d855b835f8b72
 constante_uno: .float 1.0
 
 .text
@@ -277,12 +280,20 @@ ejecutar_tanh:
 exp_taylor:
     li      $t0, 0          	# i = 0
     l.s    $f12, constante_uno  # resultado = 1
+<<<<<<< HEAD
     l.s    $f2, constante_uno   # término
+=======
+    l.s    $f2, constante_uno   # tÃ©rmino
+>>>>>>> 55c4f9c99e244fd4a3a7e541848d855b835f8b72
     l.s    $f3, constante_uno   # x^i
     l.s    $f4, constante_uno   # factorial
 
 loop_exp:
+<<<<<<< HEAD
     beq     $t0, 15, end_exp   # 15 términos (puedes cambiar)
+=======
+    beq     $t0, 15, end_exp   # 15 tÃ©rminos (puedes cambiar)
+>>>>>>> 55c4f9c99e244fd4a3a7e541848d855b835f8b72
     addi    $t0, $t0, 1
 
     # x^i = x^(i-1) * x
@@ -293,10 +304,17 @@ loop_exp:
     cvt.s.w $f5, $f5
     mul.s   $f4, $f4, $f5
 
+<<<<<<< HEAD
     # término = x^i / i!
     div.s   $f2, $f3, $f4
 
     # resultado += término
+=======
+    # tÃ©rmino = x^i / i!
+    div.s   $f2, $f3, $f4
+
+    # resultado += tÃ©rmino
+>>>>>>> 55c4f9c99e244fd4a3a7e541848d855b835f8b72
     add.s   $f12, $f12, $f2
 
     j loop_exp
