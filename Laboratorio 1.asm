@@ -292,12 +292,12 @@ ejecutar_tanh:
 exp_taylor:
     li      $t0, 0          	# i = 0
     l.s    $f12, constante_uno  # resultado = 1
-    l.s    $f2, constante_uno   # término
+    l.s    $f2, constante_uno   # t�rmino
     l.s    $f3, constante_uno   # x^i
     l.s    $f4, constante_uno   # factorial
 
 loop_exp:
-    beq     $t0, 15, end_exp   # 15 términos (puedes cambiar)
+    beq     $t0, 15, end_exp   # 15 t�rminos (puedes cambiar)
     addi    $t0, $t0, 1
 
     # x^i = x^(i-1) * x
@@ -308,10 +308,10 @@ loop_exp:
     cvt.s.w $f5, $f5
     mul.s   $f4, $f4, $f5
 
-    # término = x^i / i!
+    # t�rmino = x^i / i!
     div.s   $f2, $f3, $f4
 
-    # resultado += término
+    # resultado += t�rmino
     add.s   $f12, $f12, $f2
 
     j loop_exp
@@ -368,8 +368,8 @@ opcion_expresiones:
     move $t5, $v0
 
     beq $t5, 1, newton
-    beq $t5, 2, sistema2x2
-    beq $t5, 3, calcular_ln
+    beq $t5, 2, calcular_ln
+    beq $t5, 3, sistema2x2 
     j loop_main
 
 # ------------------------------------------------------
@@ -384,7 +384,7 @@ newton:
     syscall
     mov.s $f1, $f0   # x0 en f1
 
-    # Leer número de iteraciones
+    # Leer n�mero de iteraciones
     la   $a0, ingresar_iteraciones
     li   $v0, 4
     syscall
@@ -429,7 +429,7 @@ fin_newton:
     li   $v0, 4
     syscall
 
-    mov.s $f12, $f1   # raíz aproximada
+    mov.s $f12, $f1   # ra�z aproximada
     li   $v0, 2
     syscall
 
@@ -549,16 +549,16 @@ calcular_ln:
     mov.s $f12, $f0       # ln(x) = 0
     l.s  $f12, constante_cero
 
-    # vamos a usar 15 términos
+    # vamos a usar 15 t�rminos
     li   $t0, 1           # primer exponente impar = 1
-    li   $t1, 0           # contador de términos
+    li   $t1, 0           # contador de t�rminos
     mov.s $f6, $f5        # acumulador potencia y^n, arranca en y
 
 loop_ln:
     beq  $t1, 15, fin_ln
 
     # potencia actual: y^n (ya en f6)
-    # término = y^n / n
+    # t�rmino = y^n / n
     mtc1  $t0, $f7
     cvt.s.w $f7, $f7
     div.s $f8, $f6, $f7
