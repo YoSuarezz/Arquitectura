@@ -88,6 +88,22 @@ opcion_movimientos:
     beq $t1, 1, submenu_mru
     beq $t1, 2, submenu_mcua
     j loop_main
+    
+ejecutar_mcua_aceleracion:
+    jal mcua_aceleracion
+    j loop_main
+
+ejecutar_mcua_velfinal:
+    jal mcua_velocidad_final
+    j loop_main
+    
+ejecutar_mru_dist:
+    jal mru_distancia
+    j loop_main
+
+ejecutar_mru_vel:
+    jal mru_velocidad
+    j loop_main
 
 # =========== MRU ===========
 submenu_mru:
@@ -103,13 +119,6 @@ submenu_mru:
     beq $t2, 2, ejecutar_mru_vel
     j loop_main
 
-ejecutar_mru_dist:
-    jal mru_distancia
-    j loop_main
-
-ejecutar_mru_vel:
-    jal mru_velocidad
-    j loop_main
 # =============================
 
 mru_distancia:
@@ -180,14 +189,6 @@ submenu_mcua:
 
     beq $t3, 1, ejecutar_mcua_aceleracion
     beq $t3, 2, ejecutar_mcua_velfinal
-    j loop_main
-
-ejecutar_mcua_aceleracion:
-    jal mcua_aceleracion
-    j loop_main
-
-ejecutar_mcua_velfinal:
-    jal mcua_velocidad_final
     j loop_main
 
 # ===========================
@@ -295,12 +296,12 @@ ejecutar_tanh:
 exp_taylor:
     li      $t0, 0          	# i = 0
     l.s    $f12, constante_uno  # resultado = 1
-    l.s    $f2, constante_uno   # t�rmino
+    l.s    $f2, constante_uno   # t?rmino
     l.s    $f3, constante_uno   # x^i
     l.s    $f4, constante_uno   # factorial
 
 loop_exp:
-    beq     $t0, 15, end_exp   # 15 t�rminos (puedes cambiar)
+    beq     $t0, 15, end_exp   # 15 t?rminos (puedes cambiar)
     addi    $t0, $t0, 1
 
     # x^i = x^(i-1) * x
@@ -311,10 +312,10 @@ loop_exp:
     cvt.s.w $f5, $f5
     mul.s   $f4, $f4, $f5
 
-    # t�rmino = x^i / i!
+    # t?rmino = x^i / i!
     div.s   $f2, $f3, $f4
 
-    # resultado += t�rmino
+    # resultado += t?rmino
     add.s   $f12, $f12, $f2
 
     j loop_exp
@@ -400,7 +401,7 @@ metodo_newton:
     syscall
     mov.s $f1, $f0   # x0 en f1
 
-    # Leer n�mero de iteraciones
+    # Leer n?mero de iteraciones
     la   $a0, ingresar_iteraciones
     li   $v0, 4
     syscall
@@ -445,7 +446,7 @@ fin_newton:
     li   $v0, 4
     syscall
 
-    mov.s $f12, $f1   # ra�z aproximada
+    mov.s $f12, $f1   # ra?z aproximada
     li   $v0, 2
     syscall
 
@@ -566,16 +567,16 @@ calcular_ln:
     mov.s $f12, $f0       # ln(x) = 0
     l.s  $f12, constante_cero
 
-    # vamos a usar 15 t�rminos
+    # vamos a usar 15 t?rminos
     li   $t0, 1           # primer exponente impar = 1
-    li   $t1, 0           # contador de t�rminos
+    li   $t1, 0           # contador de t?rminos
     mov.s $f6, $f5        # acumulador potencia y^n, arranca en y
 
 loop_ln:
     beq  $t1, 15, fin_ln
 
     # potencia actual: y^n (ya en f6)
-    # t�rmino = y^n / n
+    # t?rmino = y^n / n
     mtc1  $t0, $f7
     cvt.s.w $f7, $f7
     div.s $f8, $f6, $f7
