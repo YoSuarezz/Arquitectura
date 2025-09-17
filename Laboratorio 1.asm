@@ -53,7 +53,7 @@ num_iter: 	      	.word 15         # numero de iteraciones para exp(x)
 .globl main
 
 # ======================================================
-# MENU PRINCIPAL
+#                  MENU PRINCIPAL
 # ======================================================
 main:
 loop_main:
@@ -74,7 +74,7 @@ loop_main:
     j loop_main
 
 # ======================================================
-# SUBMENU MOVIMIENTOS
+#              MOVIMIENTOS (MRU - MCUA)
 # ======================================================
 opcion_movimientos:
     la   $a0, menu_movimientos
@@ -88,8 +88,24 @@ opcion_movimientos:
     beq $t1, 1, submenu_mru
     beq $t1, 2, submenu_mcua
     j loop_main
+    
+ejecutar_mcua_aceleracion:
+    jal mcua_aceleracion
+    j loop_main
 
-# ---------- MRU ----------
+ejecutar_mcua_velfinal:
+    jal mcua_velocidad_final
+    j loop_main
+    
+ejecutar_mru_dist:
+    jal mru_distancia
+    j loop_main
+
+ejecutar_mru_vel:
+    jal mru_velocidad
+    j loop_main
+
+# =========== MRU ===========
 submenu_mru:
     la   $a0, menu_mru
     li   $v0, 4
@@ -103,13 +119,7 @@ submenu_mru:
     beq $t2, 2, ejecutar_mru_vel
     j loop_main
 
-ejecutar_mru_dist:
-    jal mru_distancia
-    j loop_main
-
-ejecutar_mru_vel:
-    jal mru_velocidad
-    j loop_main
+# =============================
 
 mru_distancia:
     # Pedir velocidad
@@ -167,7 +177,7 @@ mru_velocidad:
     syscall
     jr   $ra
 
-# ---------- MCUA ----------
+# ========== MCUA ==========
 submenu_mcua:
     la   $a0, menu_mcua
     li   $v0, 4
@@ -181,13 +191,7 @@ submenu_mcua:
     beq $t3, 2, ejecutar_mcua_velfinal
     j loop_main
 
-ejecutar_mcua_aceleracion:
-    jal mcua_aceleracion
-    j loop_main
-
-ejecutar_mcua_velfinal:
-    jal mcua_velocidad_final
-    j loop_main
+# ===========================
 
 mcua_aceleracion:
     # Pedir w_f
@@ -264,7 +268,7 @@ mcua_velocidad_final:
     jr   $ra
 
 # ======================================================
-# SUBMENU FUNCIONES TRIGONOMETRICAS
+# FUNCIONES TRIGONOMETRICAS
 # ======================================================
 opcion_trigonometrica:
     la   $a0, menu_trigo
@@ -356,7 +360,7 @@ pedir_x_tanh:
 
 
 # ======================================================
-# SUBMENU EXPRESIONES VARIAS
+#          EXPRESIONES VARIAS
 # ======================================================
 opcion_expresiones:
     la   $a0, menu_expresiones
@@ -367,15 +371,28 @@ opcion_expresiones:
     syscall
     move $t5, $v0
 
-    beq $t5, 1, newton
-    beq $t5, 2, calcular_ln
-    beq $t5, 3, sistema2x2 
+    beq $t5, 1, ejecutar_newton
+    beq $t5, 2, ejecutar_ln
+    beq $t5, 3, ejecutar_sistema2x2
+    j loop_main
+
+    ejecutar_newton:
+    jal metodo_newton
+    j loop_main
+
+    ejecutar_ln:
+    jal calcular_ln
+    j loop_main
+
+    ejecutar_sistema2x2:
+    jal metodo_sistema2x2
     j loop_main
 
 # ------------------------------------------------------
 # Metodo Newton-Raphson para f(x) = x^3 - 5x + 1
 # ------------------------------------------------------
-newton:
+
+metodo_newton:
     # Leer valor inicial x0
     la   $a0, ingresar_x
     li   $v0, 4
@@ -433,15 +450,15 @@ fin_newton:
     li   $v0, 2
     syscall
 
-    j loop_main
+    jr $ra
 
-
-# ------------------------------------------------------
+# ======================================================
 # Sistema de ecuaciones 2x2 usando regla de Cramer
 # a*x + b*y = c
 # d*x + e*y = f
-# ------------------------------------------------------
-sistema2x2:
+# ======================================================
+
+metodo_sistema2x2:
     # Leer a
     la $a0, ingresar_a
     li $v0, 4
@@ -523,13 +540,14 @@ sistema2x2:
     li   $v0, 2
     syscall
 
-    j loop_main
+    jr $ra
 
 # ------------------------------------------------------
 # Logaritmo natural usando serie
 # ln(x) = 2 * ( y + y^3/3 + y^5/5 + ... )
 # donde y = (x-1)/(x+1)
 # ------------------------------------------------------
+
 calcular_ln:
     # Leer x
     la   $a0, ingresar_ln
@@ -587,7 +605,7 @@ fin_ln:
     li   $v0, 2
     syscall
 
-    j loop_main
+    jr $ra
 
 # ======================================================
 # FIN PROGRAMA
